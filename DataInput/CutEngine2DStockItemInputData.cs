@@ -1,11 +1,13 @@
 ﻿using CutCraftEngineData.DataInput;
 using CutGLib;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace CutCraftEngineWebSocketCGLService.DataInput
 {
@@ -53,19 +55,40 @@ namespace CutCraftEngineWebSocketCGLService.DataInput
         public string aID { get; private set; }
 
         /// <summary>
-        /// aWaste is true then such stock will be used first before any actual stocks that have aWaste as false. 
+        /// aWaste defines if the stock is a waste / leftover from 
+        /// previous cutting jobs. If aWaste is true then such stock will be used first before any actual stocks that have aWaste as false. 
         /// </summary>
         public bool aWaste { get; private set; }
 
         public double sawWidth { get; private set; }
 
-
-        public CutEngine2DStockItemInputData(IMaterial material, IStockItem stockItem, StockPriority prioriy = StockPriority.normal)
-        {
-            _material = material;
+        /// <summary>
+        /// Input data with the specified stock with items.
+        /// </summary>
+        /// <remarks>
+        /// A single stock can only have one type of material with specific quantity.
+        /// </remarks>
+        /// <param name="materialList">All materials to use</param>
+        /// <param name="stockItem">StockItem</param>
+        /// <param name="allowOverStock">
+        ///     The allowOverstock parameter controls the behavior of the cutting optimization algorithm.
+        ///     When set to true, the algorithm is permitted to allocate more stock items than currently available.
+        /// 
+        ///     This can be useful in scenarios where future stock replenishment is anticipated or over-allocation is acceptable.
+        ///     Please note that enabling this option may lead to situations where demand exceeds supply.
+        ///     Note that it applies only to standard stock sizes.So, in order to use more stock items than available, 
+        ///     you have to define standard stock items in material definition.
+        ///     Then, you have to add stock item with the same standard size.
+        /// </param>
+        /// <param name="prioriy">StockPriority - If is high then such stock will be used first before any actual stocks that have priority as normal. </param>
+        /// <exception cref="Exception">Exception - when the material is not a 2D type (kind)</exception>
+        public CutEngine2DStockItemInputData(List<IMaterial> materialList, IStockItem stockItem, bool allowOverStock = false, StockPriority prioriy = StockPriority.normal)
+        {            
+            _material = materialList.FirstOrDefault(x => x.id == stockItem.materialId) ?? throw new Exception($"Material with ID: {stockItem.materialId} does not exist in the list of materials to use.");
             _stockItem = stockItem;
 
-            if (!Is2D()) throw new Exception("The material (kind) has to be 2D");
+            if (!Is2D()) throw new Exception("The material type (kind) has to be 2D");
+            if (_material.standardStockItems.Count == 0 && allowOverStock == true) throw new Exception("StandardStockItem is mandatory when the allowOverstock is enabled.");
 
             aWidth = _stockItem.length;
             aHeight = _stockItem.width;
@@ -95,6 +118,9 @@ namespace CutCraftEngineWebSocketCGLService.DataInput
         /// <returns>An anonymous object with the calculated length and width.</returns>
         public dynamic SizeReal() => _stockItem.SizeReal();
 
+        /// <summary>
+        /// Edging configuration.
+        /// </summary>
         public Edging GetEdging() => _stockItem.edging;
     }
 }
