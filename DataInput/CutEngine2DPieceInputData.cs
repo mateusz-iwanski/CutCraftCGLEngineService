@@ -60,23 +60,23 @@ namespace CutCraftEngineWebSocketCGLService.DataInput
         public int Surplus(int dimension) => dimension + (_piece.surplus * 2);
 
         /// <summary>
-        /// Calculates the size of the _piece based on length, width, surplus and Margin.
+        /// Calculates the size of the Piece based on length, width, surplus and Margin.
         /// </summary>
         /// <returns>Returns an anonymous object with the calculated length and width.</returns>
         public dynamic SizeReal() => _piece.SizeReal();
 
         /// <summary>
-        /// Specifies acceptable structures of the _piece. Allowed values: none, byLength, byWidth.
+        /// Specifies acceptable structures of the Piece. Allowed values: none, byLength, byWidth.
         /// Allowed values
         ///     - none
-        ///         The material has no structure. Is not good idea to use it, if set none optimalization not rotate the _piece.
+        ///         The material has no structure. Is not good idea to use it, if set none optimalization not rotate the Piece.
         ///         Is better to use
         ///     - byLength
         ///         The structure is horizontal (along length).
         ///     - byWidth
         ///         The structure is vertical (along width).
         ///     - "none,byLength,byWidth" = The material has no structure or with structure but can be rotate.
-        ///       With this settings the _piece will can be rotated by optimalization.
+        ///       With this settings the Piece will can be rotated by optimalization.
         ///     - any
         public bool Rotatable() => _piece.structure == "byLength" || _piece.structure == "byWidth" ? false : true;  
     }
