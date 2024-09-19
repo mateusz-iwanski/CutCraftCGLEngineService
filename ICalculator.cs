@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CutCraftEngineData.DataInput;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,6 +12,6 @@ namespace CutCraftEngineWebSocketCGLService
     /// </summary>
     public interface ICalculator
     {
-        public string Execute();
+        public string Execute(Command command);
     }
 }
