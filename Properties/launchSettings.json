@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "CutCraftEngineWebSocketCGLService": {
+      "commandName": "Project",
+      "commandLineArgs": "-c cutglib"
+    }
+  }
+}
