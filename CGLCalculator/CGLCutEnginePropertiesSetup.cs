@@ -28,7 +28,7 @@ namespace CutCraftEngineWebSocketCGLService.CGLCalculator
         {
 
             var profile = command.Config.profiles.FirstOrDefault(p => p.active == true);
-            var dataInput = command.InputWrapper.input;
+            var dataInput = command.Input;
 
             IStockItem stockItem = dataInput.stock.First(); //, command.Configuration, command.Configuration.profiles.FirstOrDefault(p => p.active == true), SwitchToSmall, command.Configuration.Device
             Limits limits = profile.limits;
