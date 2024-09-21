@@ -8,17 +8,24 @@ using System.Threading.Tasks;
 
 namespace CutCraftEngineWebSocketCGLService.CGLCalculator
 {
-    public class CGLCalculator : ICalculator
+    public class CGLCalculator : ICalculator, ICGLCalculator
     {
-        private readonly CutEngine _cutEngine;
+        private CutEngine CutEngine;
         
         public CGLCalculator() => 
-            _cutEngine = new CutEngine();
+            this.CutEngine = new CutEngine();
 
         public string Execute(Command command)
         {
-            new CGLCutEngineSetup(command, _cutEngine);
-            return _cutEngine.Execute();
+            new CGLCutEngineSetup(command, this.CutEngine);
+            return this.CutEngine.Execute();
+        }
+
+        public CutEngine GetCutEngine() => this.CutEngine;
+
+        public void OutoputForConsole()
+        {
+            new GCLConsoleResultReader(this);
         }
     }
 }
