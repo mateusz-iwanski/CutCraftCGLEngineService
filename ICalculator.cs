@@ -1,4 +1,5 @@
 ﻿using CutCraftEngineData.DataInput;
+using CutGLib;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,7 +12,8 @@ namespace CutCraftEngineWebSocketCGLService
     /// Interface for all calculators included in the service (CutGlib, TonCut, etc)
     /// </summary>
     public interface ICalculator
-    {
+    {        
         public string Execute(Command command);
+        void PrintResultToConsole();
     }
 }
