@@ -15,6 +15,14 @@ namespace CutCraftEngineWebSocketCGLService.DataInput
         private static readonly Dictionary<string, bool> States = new Dictionary<string, bool>
         {
             { "none,byLength,byWidth", false },  // can be rotated
+            { "none,byWidth,byLength", false },  // can be rotated
+
+            { "byLength,none,byWidth", false },  // can be rotated
+            { "byLength,byWidth,none", false },  // can be rotated
+
+            { "byWidth,byLength,none", false },  // can be rotated
+            { "byWidth,none,byLength", false },  // can be rotated
+
             { "byLength", true },  // structure by length - can't be rotated
             { "byWidth", true }  // structure by width - can't be rotated
         };
