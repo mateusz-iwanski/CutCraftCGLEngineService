@@ -92,8 +92,8 @@ namespace CutCraftEngineWebSocketCGLService.DataInput
         public CutEngine2DStockItemInputData(Command command, IMaterial material, StockPriority prioriy = StockPriority.normal)
         {
             Material = material;//command.Input.materials.FirstOrDefault(x => x.id == stockItem.materialId) ?? throw new Exception($"Material with ID: {stockItem.materialId} does not exist in the list of materials to use.");
-            StockItem = command.InputWrapper.input.stock.FirstOrDefault(s => s.materialId == Material.id) ?? throw new Exception($"Stock with Material ID: {Material.id} does not exist in the list of stocks to use.");
-            Piece = command.InputWrapper.input.pieces.FirstOrDefault(p => p.materialId == Material.id) ?? throw new Exception($"Piece with Material ID: {Material.id} does not exist in the list of pieces to use.");
+            StockItem = command.Input.stock.FirstOrDefault(s => s.materialId == Material.id) ?? throw new Exception($"Stock with Material ID: {Material.id} does not exist in the list of stocks to use.");
+            Piece = command.Input.pieces.FirstOrDefault(p => p.materialId == Material.id) ?? throw new Exception($"Piece with Material ID: {Material.id} does not exist in the list of pieces to use.");
 
             if (!Is2D()) throw new Exception("The material type (kind) has to be 2D");
             if (Material.standardStockItems.Count == 0 && command.AllowOverstock == true) throw new Exception("StandardStockItem is mandatory when the allowOverstock is enabled.");
