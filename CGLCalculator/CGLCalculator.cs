@@ -23,9 +23,9 @@ namespace CutCraftEngineWebSocketCGLService.CGLCalculator
 
         public CutEngine GetCutEngine() => this.CutEngine;
 
-        public void OutoputForConsole()
+        public void PrintResultToConsole()
         {
-            new GCLConsoleResultReader(this);
+            new CGLConsoleResultPrinter(this);
         }
     }
 }
