@@ -12,15 +12,13 @@ namespace CutCraftEngineWebSocketCGLService.CGLCalculator
     internal class CGLCutEngineSetup
     {
 
-        public readonly CutEngine cutEngine;
-
         public CGLCutEngineSetup(Command command, CutEngine cutEngine)
         {
-            var stockList = command.InputWrapper.input.stock;
+            var stockList = command.Input.stock;
 
             foreach (var stock in stockList)
             {
-                var materials = command.InputWrapper.input.materials;
+                var materials = command.Input.materials;
 
                 foreach (var material in materials)
                 {
@@ -45,8 +43,6 @@ namespace CutCraftEngineWebSocketCGLService.CGLCalculator
                         );
                 }
             }
-
-            this.cutEngine = cutEngine;
-        }
+        }       
     }
 }
