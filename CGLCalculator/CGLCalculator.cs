@@ -1,4 +1,5 @@
 ﻿using CutCraftEngineData.DataInput;
+using CutCraftEngineData.DataOutput;
 using CutGLib;
 using System;
 using System.Collections.Generic;
@@ -8,21 +9,46 @@ using System.Threading.Tasks;
 
 namespace CutCraftEngineWebSocketCGLService.CGLCalculator
 {
-    public class CGLCalculator : ICalculator, ICGLCalculator
+    /// <summary>
+    /// Main CutGlib engine calculator class.
+    /// </summary>
+    public class CGLCalculator : ICalculator
     {
-        private CutEngine CutEngine;
-        
-        public CGLCalculator() => 
-            this.CutEngine = new CutEngine();
+        private CutEngine _cutEngine { get; set; }
+        private Command _command { get; set; }
+        private List<DataOutputs> _dataOutputs { get; set; }
+        private CutEngineInitializer _cutEngineInitializer { get; set; }
 
-        public string Execute(Command command)
+        public CGLCalculator() { }
+
+        /// <summary>
+        /// Calculate the cutting plan and set results to the DataOutputs.
+        /// </summary>
+        /// <param name="command"></param>
+        /// <returns>Completed DataOutputs object</returns>
+        public bool Execute(Command command)
         {
-            new CGLCutEngineSetup(command, this.CutEngine);
-            return this.CutEngine.Execute();
+            _command = command;
+            _cutEngineInitializer = new CutEngineInitializer(_command);
+            _dataOutputs = _cutEngineInitializer.Execute();
+            return true;
         }
 
-        public CutEngine GetCutEngine() => this.CutEngine;
+        public bool IsExecuted()
+        {
+            if (_cutEngineInitializer == null) 
+                return false;
+            else 
+                return _cutEngineInitializer.IsExecuted;
+        }
 
+        public List<DataOutputs> GetDataOutputs() => _dataOutputs;
+
+        public CutEngine GetCutEngine() => _cutEngineInitializer.GetCutEngine();
+
+        /// <summary>
+        /// Print the result with engine settings to the console.
+        /// </summary>
         public void PrintResultToConsole()
         {
             new CGLConsoleResultPrinter(this);
