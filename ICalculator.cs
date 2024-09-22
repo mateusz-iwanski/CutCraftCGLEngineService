@@ -1,4 +1,5 @@
 ﻿using CutCraftEngineData.DataInput;
+using CutCraftEngineData.DataOutput;
 using CutGLib;
 using System;
 using System.Collections.Generic;
@@ -13,7 +14,10 @@ namespace CutCraftEngineWebSocketCGLService
     /// </summary>
     public interface ICalculator
     {        
-        public string Execute(Command command);
+        public bool Execute(Command command);        
         void PrintResultToConsole();
+        public List<DataOutputs> GetDataOutputs();
+
+
     }
 }
