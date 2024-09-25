@@ -1,6 +1,7 @@
 ﻿using CutCraftEngineData.DataInput;
 using CutCraftEngineData.DataOutput;
 using CutCraftEngineWebSocketCGLService.DataInput;
+using CutCraftEngineWebSocketCGLService.DataOutput;
 using CutGLib;
 using System;
 using System.Collections.Generic;
@@ -18,6 +19,8 @@ namespace CutCraftEngineWebSocketCGLService.CGLCalculator
         // Add a private field to track the execution status
         private bool _isExecuted;
 
+        private readonly CGLProcessDataOutput _processDataOutput;
+
         // Add a public property to access the execution status
         public bool IsExecuted => _isExecuted;
 
@@ -25,8 +28,9 @@ namespace CutCraftEngineWebSocketCGLService.CGLCalculator
         public event EventHandler CutEngineExecuted;
 
         public CutEngineInitializer(Command command)
-        {
-            _command = command;            
+        {            
+            _command = command;
+            _processDataOutput = new CGLProcessDataOutput(_command);
             return;
         }
 
@@ -45,34 +49,38 @@ namespace CutCraftEngineWebSocketCGLService.CGLCalculator
 
                 var cutEngineInputData = new CutEngine2DStockItemInputData(_command, material);
 
-                foreach (var stockItem in cutEngineInputData.StockItem)
+                foreach (var stock in cutEngineInputData.Stock)
                 {
-                    var priority = getStockPriority(stockItem.priority);
-
                     _cutEngine.AddStock(
-                        AWidth: stockItem.length,
-                        AHeight: stockItem.width,
-                        aCount: stockItem.quantity,
-                        aID: material.title,
-                        aWaste: Convert.ToBoolean((int)priority)
+                        AWidth: stock.aWidth,
+                        AHeight: stock.aHeight,
+                        aCount: stock.aCount,
+                        aID: stock.aID,
+                        aWaste: stock.aWaste
                         );
                 }
 
                 foreach (var piece in cutEngineInputData.Piece)
                 {
                     _cutEngine.AddPart(
-                        AWidth: piece.width,
-                        AHeight: piece.length,
-                        aCount: piece.quantity,
-                        ARotatable: piece.Rotated(),
-                        aID: piece.identifier
+                        AWidth: piece.aWidth,
+                        AHeight: piece.aHeight,
+                        aCount: piece.aCount,
+                        ARotatable: piece.aRotatable,
+                        aID: piece.aID
                         );
                 }
 
                 _cutEngine.Execute();                
                 _isExecuted = true;
                 OnCutEngineExecuted(EventArgs.Empty);
-                result.Append(ProcessData());
+
+
+                CuttingsMapper c = new CuttingsMapper(_cutEngine);
+                var a = Newtonsoft.Json.JsonConvert.SerializeObject(c.Map());
+                Console.WriteLine(a);
+
+                //result.Append(processData());
             }
 
             return result;
@@ -82,15 +90,11 @@ namespace CutCraftEngineWebSocketCGLService.CGLCalculator
         /// After execution, data is processed.
         /// </summary>
         /// <returns>Completed DataOutputs object</returns>
-        private DataOutputs ProcessData()
-        {
-            return new CGLProcessDataOutput(this, _command).BuildDataOutput();
-        }
-
-        /// <summary>
-        /// If priority is normal then such stock will be used first before any actual stocks that have low priority. 
-        /// </summary>
-        private StockPriority getStockPriority(string priority) => priority == "normal" ? StockPriority.high : StockPriority.normal;
+        //private DataOutputs processCuttingOutputData(ICutEngine2DStockSetup stock)
+        //{
+        //    _processDataOutput.SetCutEngine(this);
+        //    _processDataOutput.
+        //}
 
         // Method to trigger the CutEngineExecuted event
         protected virtual void OnCutEngineExecuted(EventArgs e)
