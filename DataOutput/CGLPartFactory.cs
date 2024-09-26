@@ -17,10 +17,10 @@ namespace CutCraftEngineWebSocketCGLService.DataOutput
         private List<CGLPart> _parts = new List<CGLPart>();
         private readonly List<CGLSheet> _sheets;
 
-        public CGLPartFactory(CutEngine cutEngine, List<CGLSheet> sheets)
+        public CGLPartFactory(CutEngine cutEngine, ICGLDataOutputFactory<CGLSheet> sheets)
         {
             _cutEngine = cutEngine;
-            _sheets = sheets;
+            _sheets = sheets.Get();
 
             Build();
 
