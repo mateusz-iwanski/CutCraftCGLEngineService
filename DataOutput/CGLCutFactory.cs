@@ -19,11 +19,11 @@ namespace CutCraftEngineWebSocketCGLService.DataOutput
         private readonly List<CGLSheet> _sheets;
         private readonly List<CGLLayout> _layouts;
 
-        public CGLCutFactory(CutEngine cutEngine, List<CGLSheet> sheets, List<CGLLayout> layout)
+        public CGLCutFactory(CutEngine cutEngine, ICGLDataOutputFactory<CGLSheet> sheets, ICGLDataOutputFactory<CGLLayout> layout)
         {
             _cutEngine = cutEngine;
-            _sheets = sheets;
-            _layouts = layout;
+            _sheets = sheets.Get();
+            _layouts = layout.Get();
 
             Build();
 
