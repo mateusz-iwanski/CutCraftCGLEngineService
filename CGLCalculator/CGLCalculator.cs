@@ -19,6 +19,11 @@ namespace CutCraftEngineWebSocketCGLService.CGLCalculator
         private List<DataOutputs> _dataOutputs { get; set; }
         private CutEngineInitializer _cutEngineInitializer { get; set; }
 
+        /// <summary>
+        /// Event raise when CutEngine is executed.
+        /// </summary>
+        public event EventHandler InitializeExecutedEvent;
+
         public CGLCalculator() { }
 
         /// <summary>
@@ -30,15 +35,19 @@ namespace CutCraftEngineWebSocketCGLService.CGLCalculator
         {
             _command = command;
             _cutEngineInitializer = new CutEngineInitializer(_command);
+
+            // Subscribe to the CutEngineExecuted event. It's raise when _cutEngine.Execute() is called.            
+            _cutEngineInitializer.CutEngineExecuted += (sender, e) => InitializeExecutedEvent?.Invoke(sender, e);
             _dataOutputs = _cutEngineInitializer.Execute();
+            
             return true;
         }
 
         public bool IsExecuted()
         {
-            if (_cutEngineInitializer == null) 
+            if (_cutEngineInitializer == null)
                 return false;
-            else 
+            else
                 return _cutEngineInitializer.IsExecuted;
         }
 
@@ -46,12 +55,5 @@ namespace CutCraftEngineWebSocketCGLService.CGLCalculator
 
         public CutEngine GetCutEngine() => _cutEngineInitializer.GetCutEngine();
 
-        /// <summary>
-        /// Print the result with engine settings to the console.
-        /// </summary>
-        public void PrintResultToConsole()
-        {
-            new CGLConsoleResultPrinter(this);
-        }
     }
 }
