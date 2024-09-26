@@ -11,7 +11,7 @@ namespace CutCraftEngineWebSocketCGLService.DataInput
     /// <summary>
     /// Unify the Stock data from the input data before adding it to the CutGLib engine.
     /// </summary>
-    public class CutEngine2DStockSetup : ICutEngine2DStockSetup
+    public class CutEngine2DStockSetup
     {
         private readonly IStockItem _stock;
 
