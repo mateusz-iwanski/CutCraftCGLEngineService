@@ -22,11 +22,11 @@ namespace CutCraftEngineWebSocketCGLService.DataOutput
         private readonly List<CGLLayout> _layouts;
         private readonly List<CGLSheet> _sheets;
 
-        public CGLLayoutStatistics2DFactory(CutEngine cutEngine, List<CGLLayout> cGLLayouts, List<CGLSheet> cGLSheets)
+        public CGLLayoutStatistics2DFactory(CutEngine cutEngine, ICGLDataOutputFactory<CGLLayout> cGLLayouts, ICGLDataOutputFactory<CGLSheet> cGLSheets)
         {
             _cutEngine = cutEngine;
-            _layouts = cGLLayouts;
-            _sheets = cGLSheets;
+            _layouts = cGLLayouts.Get();
+            _sheets = cGLSheets.Get();
             
             Build();
 
