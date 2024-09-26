@@ -18,13 +18,13 @@ namespace CutCraftEngineWebSocketCGLService.DataOutput
         private List<CGLSheet> _sheets;
         private List<CGLPart> _parts;
 
-        public CGLLayoutFactory(CutEngine cutEngine, List<CGLSheet> sheets, List<CGLPart> parts)
+        public CGLLayoutFactory(CutEngine cutEngine, ICGLDataOutputFactory<CGLSheet> sheets, ICGLDataOutputFactory<CGLPart> parts)
         {
             _cutEngine = cutEngine;
 
             _layout = new List<CGLLayout>();
-            _sheets = sheets;
-            _parts = parts;
+            _sheets = sheets.Get();
+            _parts = parts.Get();
 
             Build();
         }
