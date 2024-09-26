@@ -23,8 +23,8 @@ namespace CutCraftEngineWebSocketCGLService.DataInput
     /// </remarks>
     public class CutEngine2DStockItemInputData
     {
-        public readonly List<ICutEngine2DPieceSetup> Piece;        
-        public readonly List<ICutEngine2DStockSetup> Stock;
+        public readonly List<CutEngine2DPieceSetup> Piece;        
+        public readonly List<CutEngine2DStockSetup> Stock;
 
         /// <summary>
         /// Constructor find stock and pieces with specific material.
@@ -62,9 +62,9 @@ namespace CutCraftEngineWebSocketCGLService.DataInput
         /// </summary>
         /// <param name="pieces">List of pieces from DataInput</param>
         /// <returns>Unify pices in list</returns>
-        private List<ICutEngine2DPieceSetup> UnifyPieces(List<IPiece> pieces)
+        private List<CutEngine2DPieceSetup> UnifyPieces(List<IPiece> pieces)
         {
-            var result = new List<ICutEngine2DPieceSetup>();
+            var result = new List<CutEngine2DPieceSetup>();
 
             foreach (var piece in pieces)
             {
@@ -79,9 +79,9 @@ namespace CutCraftEngineWebSocketCGLService.DataInput
         /// </summary>
         /// <param name="stocks">List of stocks from DataInput</param>
         /// <returns>Unify stocks in list</returns>
-        private List<ICutEngine2DStockSetup> UnifyStocks(List<IStockItem> stocks)
+        private List<CutEngine2DStockSetup> UnifyStocks(List<IStockItem> stocks)
         {
-            var result = new List<ICutEngine2DStockSetup>();
+            var result = new List<CutEngine2DStockSetup>();
 
             foreach (var stock in stocks)
             {
