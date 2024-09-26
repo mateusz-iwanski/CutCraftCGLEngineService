@@ -12,7 +12,7 @@ namespace CutCraftEngineWebSocketCGLService.DataOutput
     /// Mapping CutGlib data output to list of DataOutput Cutting
     /// </summary>
 
-    public class CuttingsMapper
+    public class CuttingsFactory : ICGLDataOutputFactory<Cutting>
     {
         private readonly CutEngine _cutEngine;
 
@@ -25,18 +25,20 @@ namespace CutCraftEngineWebSocketCGLService.DataOutput
         private List<Cutting> _cuttings { get; set; }
 
 
-        public CuttingsMapper(CutEngine cutEngine)
+        public CuttingsFactory(CutEngine cutEngine)
         {
             _cutEngine = cutEngine;
 
             _sheetFactory = new CGLSheetFactory(_cutEngine);
-            _partFactory = new CGLPartFactory(_cutEngine, _sheetFactory.Get());
-            _layoutFactory = new CGLLayoutFactory(_cutEngine, _sheetFactory.Get(), _partFactory.Get());
-            _cutFactory = new CGLCutFactory(_cutEngine, _sheetFactory.Get(), _layoutFactory.Get());
-            _statistics2DFactory = new CGLLayoutStatistics2DFactory(_cutEngine, _layoutFactory.Get(), _sheetFactory.Get());
+            _partFactory = new CGLPartFactory(_cutEngine, _sheetFactory);
+            _layoutFactory = new CGLLayoutFactory(_cutEngine, _sheetFactory, _partFactory);
+            _cutFactory = new CGLCutFactory(_cutEngine, _sheetFactory, _layoutFactory);
+            _statistics2DFactory = new CGLLayoutStatistics2DFactory(_cutEngine, _layoutFactory, _sheetFactory);
+
+            Build();
         }
 
-        public List<Cutting> Map()
+        private List<Cutting> Build()
         {
             _cuttings = new List<Cutting>();
 
@@ -69,7 +71,7 @@ namespace CutCraftEngineWebSocketCGLService.DataOutput
             return _cuttings;
         }
 
-
+        public List<Cutting> Get() => _cuttings;
 
     }
 }
