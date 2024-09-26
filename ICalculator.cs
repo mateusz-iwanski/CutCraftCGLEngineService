@@ -14,10 +14,8 @@ namespace CutCraftEngineWebSocketCGLService
     /// </summary>
     public interface ICalculator
     {        
-        public bool Execute(Command command);        
-        void PrintResultToConsole();
+        public bool Execute(Command command);
+        public event EventHandler InitializeExecutedEvent;
         public List<DataOutputs> GetDataOutputs();
-
-
     }
 }
