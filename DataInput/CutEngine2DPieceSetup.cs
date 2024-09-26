@@ -12,7 +12,7 @@ namespace CutCraftEngineWebSocketCGLService.DataInput
     /// <summary>
     /// Unify the Piece data from the input data before adding it to the CutGLib engine.
     /// </summary>
-    public class CutEngine2DPieceSetup : ICutEngine2DPieceSetup
+    public class CutEngine2DPieceSetup
     {
         private readonly IPiece _piece;
 
