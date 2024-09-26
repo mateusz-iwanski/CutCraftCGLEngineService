@@ -73,11 +73,11 @@ namespace CutCraftEngineWebSocketCGLService.CGLCalculator
 
                 _cutEngine.Execute();                
                 _isExecuted = true;
-                OnCutEngineExecuted(EventArgs.Empty);
+                OnCutEngineExecuted(new CutEngineEventArgs(_cutEngine));
 
 
-                CuttingsMapper c = new CuttingsMapper(_cutEngine);
-                var a = Newtonsoft.Json.JsonConvert.SerializeObject(c.Map());
+                CuttingsFactory c = new CuttingsFactory(_cutEngine);
+                var a = Newtonsoft.Json.JsonConvert.SerializeObject(c.Get());
                 Console.WriteLine(a);
 
                 //result.Append(processData());
@@ -97,7 +97,7 @@ namespace CutCraftEngineWebSocketCGLService.CGLCalculator
         //}
 
         // Method to trigger the CutEngineExecuted event
-        protected virtual void OnCutEngineExecuted(EventArgs e)
+        protected virtual void OnCutEngineExecuted(CutEngineEventArgs e)
         {
             CutEngineExecuted?.Invoke(this, e);
         }
