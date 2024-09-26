@@ -57,22 +57,18 @@ namespace CutCraftEngineWebSocketCGLService
 
             using var scope = serviceProvider.CreateScope();
 
-            ICalculator engineCalculator = scope.ServiceProvider.GetRequiredService<Func<string, ICalculator>>()(cutterEngine.ToString());
+            ICalculator calculator = scope.ServiceProvider.GetRequiredService<Func<string, ICalculator>>()(cutterEngine.ToString());
 
-            // engineCalculator.processData(command);
-
+            if (calculator.GetType() == typeof(CGLCalculator.CGLCalculator))
+            {
+                CGLConsoleLogger cGLConsoleLogger = new CGLConsoleLogger((CGLCalculator.CGLCalculator)calculator);
+            }
 
             // Deserialize the JSON file into a Command object
             string json = File.ReadAllText("test_input.json");
             Command command = JsonConvert.DeserializeObject<Command>(json);
-
-            engineCalculator.Execute(command);
-
-            Console.WriteLine("================" + engineCalculator.GetDataOutputs());
-
-
-            // here we can connect to OnCutEngineExecuted event
-            engineCalculator.PrintResultToConsole();
+            calculator.Execute(command);
+            Console.WriteLine("================" + calculator.GetDataOutputs());
 
         }
 
@@ -89,44 +85,5 @@ namespace CutCraftEngineWebSocketCGLService
                    var startup = new Startup();
                    startup.ConfigureServices(services);
                });
-
-
-        private static void OutputSheetResults_by_Parts(CutEngine aCalculator)
-        {
-            int StockNo, iCut, iPart;
-            long CutsCount;
-            double Width, Height, X1 = 0, Y1 = 0, X2 = 0, Y2 = 0;
-            bool active;
-            string id;
-            Console.Write("\n");
-            Console.Write("OUTPUT CUTS RESULTS\n");
-            Console.Write("Used {0} sheets\n", aCalculator.UsedStockCount);
-            // Output guilltoine cuts for each sheet
-            for (StockNo = 0; StockNo < aCalculator.StockCount; StockNo++)
-            {
-                aCalculator.GetStockInfo(StockNo, out Width, out Height, out active);
-                // Sheet was not used during calculation
-                if (!active)
-                {
-                    Console.Write("Sheet={0} was not used.\n", StockNo);
-                    continue;
-                }
-                Console.Write("Sheet={0}: Width={1} Height={2}\n", StockNo, Width, Height);
-                // First output any trim cuts for the sheet StockNo
-                CutsCount = aCalculator.GetStockTrimCutCount(StockNo);
-                for (iCut = 0; iCut < CutsCount; iCut++)
-                {
-                    aCalculator.GetStockTrimCut(StockNo, iCut, out X1, out Y1, out X2, out Y2);
-                    Console.Write("Trim  Cut={0}:  X1={1};  Y1={2};  X2={3};  Y2={4}\n", iCut, X1, Y1, X2, Y2);
-                }
-                // Now output any actual cuts for the sheet StockNo
-                CutsCount = aCalculator.GetStockCutCount(StockNo);
-                for (iCut = 0; iCut < CutsCount; iCut++)
-                {
-                    aCalculator.GetStockCut(StockNo, iCut, out X1, out Y1, out X2, out Y2);
-                    Console.Write("Cut={0}:  X1={1};  Y1={2};  X2={3};  Y2={4}\n", iCut, X1, Y1, X2, Y2);
-                }
-            }
-        }
     }
 }
