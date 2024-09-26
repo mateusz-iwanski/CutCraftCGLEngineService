@@ -10,6 +10,10 @@ namespace CutCraftEngineWebSocketCGLService.CGLCalculator
     /// <summary>
     /// Print cutting optimization results with calculator settings on the console
     /// </summary>
+    /// <remarks>
+    /// Use by CGLConsoleLogger.
+    /// It is used to print the result to the console whenever Execute is called by CutEngine.
+    /// </remarks>
     public class CGLConsoleResultPrinter
     {
         private readonly CutEngine _cutEngine;
@@ -75,7 +79,7 @@ namespace CutCraftEngineWebSocketCGLService.CGLCalculator
             Console.WriteLine("OUTPUT PARTS RESULTS");
             Console.WriteLine("======================================");
 
-            Console.WriteLine("Part Count={0}", _cutEngine.PartCount);
+            Console.WriteLine("PartId Count={0}", _cutEngine.PartCount);
             for (iPart = 0; iPart < _cutEngine.PartCount; iPart++)
             {
                 // Get sizes and location of the source part with index Iter
@@ -83,10 +87,10 @@ namespace CutCraftEngineWebSocketCGLService.CGLCalculator
                 // and the function returns FALSE.
                 if (_cutEngine.GetResultPart(iPart, out StockNo, out W, out H, out X, out Y, out Rotated, out id))
                 {
-                    Console.WriteLine("Part ID={0};  sheet={1};  X={2};  Y={3};  Width={4};  Height={5}",
+                    Console.WriteLine("PartId Id={0};  sheet={1};  X={2};  Y={3};  Width={4};  Height={5}",
                                   id, StockNo, X, Y, W, H);
                 }
-                else Console.WriteLine("Part {0} was not placed", iPart);
+                else Console.WriteLine("PartId {0} was not placed", iPart);
             }
             Console.WriteLine();
         }
@@ -138,7 +142,7 @@ namespace CutCraftEngineWebSocketCGLService.CGLCalculator
                                     // Output the coordinates
                                     if (rotated) Txt = "Yes";
                                     else Txt = "No";
-                                    Console.WriteLine("Part={0}; sheet={1}; Width={2}; Height={3}; X={4}; Y={5}; Rotated={6}",
+                                    Console.WriteLine("PartId={0}; sheet={1}; Width={2}; Height={3}; X={4}; Y={5}; Rotated={6}",
                                                   partIndex, iSheet, W, H, X, Y, Txt);
 
                                 }
@@ -199,7 +203,7 @@ namespace CutCraftEngineWebSocketCGLService.CGLCalculator
             Console.WriteLine("Remaining part count={0}", _cutEngine.RemainingPartCount);
             Console.WriteLine("Used linear stock count={0}", _cutEngine.UsedLinearStockCount);            
             Console.WriteLine("Stock count={0}", _cutEngine.StockCount);
-            Console.WriteLine("Part count={0}", _cutEngine.PartCount);
+            Console.WriteLine("PartId count={0}", _cutEngine.PartCount);
             Console.WriteLine("Elapsed time={0}", _cutEngine.ElapsedTime);
             Console.WriteLine("Placed part count={0}", _cutEngine.PlacedPartCount);            
             Console.WriteLine("Version={0}", _cutEngine.Version);
