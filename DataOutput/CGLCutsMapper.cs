@@ -10,11 +10,11 @@ namespace CutCraftEngineWebSocketCGLService.DataOutput
     /// <summary>
     /// Mapping list of CutGLib CGLCut to list of DataOutput Cut
     /// </summary>
-    public class CutsMapper 
+    public class CGLCutsMapper 
     {
         private readonly List<CGLCut> _cuts;
 
-        public CutsMapper(List<CGLCut> cuts)
+        public CGLCutsMapper(List<CGLCut> cuts)
         {
             _cuts = cuts;
             return;
