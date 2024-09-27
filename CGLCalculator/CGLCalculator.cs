@@ -16,8 +16,12 @@ namespace CutCraftEngineWebSocketCGLService.CGLCalculator
     {
         private CutEngine _cutEngine { get; set; }
         private Command _command { get; set; }
-        private List<DataOutputs> _dataOutputs { get; set; }
-        private CutEngineInitializer _cutEngineInitializer { get; set; }
+
+        /// <summary>
+        /// Group of cuttings data for each material
+        /// </summary>
+        private List<List<Cutting>> _dataCuttingsGroupOutputs { get; set; }
+        private CGLCutEngineInitializer _cutEngineInitializer { get; set; }
 
         /// <summary>
         /// Event raise when CutEngine is executed.
@@ -34,14 +38,14 @@ namespace CutCraftEngineWebSocketCGLService.CGLCalculator
         public bool Execute(Command command)
         {
             _command = command;
-            _cutEngineInitializer = new CutEngineInitializer(_command);
+            _cutEngineInitializer = new CGLCutEngineInitializer(_command);
 
             // Subscribe to the CutEngineExecuted event. It's raise when _cutEngine.Execute() is called.            
             _cutEngineInitializer.CutEngineExecuted += (sender, e) => InitializeExecutedEvent?.Invoke(sender, e);
-            _dataOutputs = _cutEngineInitializer.Execute();
+            _dataCuttingsGroupOutputs = _cutEngineInitializer.Execute();
             
             return true;
-        }
+        }   
 
         public bool IsExecuted()
         {
@@ -51,7 +55,7 @@ namespace CutCraftEngineWebSocketCGLService.CGLCalculator
                 return _cutEngineInitializer.IsExecuted;
         }
 
-        public List<DataOutputs> GetDataOutputs() => _dataOutputs;
+        public List<List<Cutting>> GetDataCuttingsOutputs() => _dataCuttingsGroupOutputs;
 
         public CutEngine GetCutEngine() => _cutEngineInitializer.GetCutEngine();
 
