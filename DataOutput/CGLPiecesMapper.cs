@@ -10,11 +10,11 @@ namespace CutCraftEngineWebSocketCGLService.DataOutput
     /// <summary>
     /// Mapping list of CutGLib CGLPart to list of DataOutput CuttingPiece
     /// </summary>
-    public class PiecesMapper
+    public class CGLPiecesMapper
     {
         List<CGLPart> _parts;
 
-        public PiecesMapper(List<CGLPart> parts)
+        public CGLPiecesMapper(List<CGLPart> parts)
         {
             _parts = parts;
             return;
