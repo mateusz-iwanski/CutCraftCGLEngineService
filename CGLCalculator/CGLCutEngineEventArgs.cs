@@ -10,11 +10,11 @@ namespace CutCraftEngineWebSocketCGLService.CGLCalculator
     /// <summary>
     /// Custom event arguments for CutEngine event.
     /// </summary>
-    public class CutEngineEventArgs : EventArgs
+    public class CGLCutEngineEventArgs : EventArgs
     {
         public CutEngine CutEngine { get; }
 
-        public CutEngineEventArgs(CutEngine cutEngine)
+        public CGLCutEngineEventArgs(CutEngine cutEngine)
         {
             CutEngine = cutEngine;
         }
