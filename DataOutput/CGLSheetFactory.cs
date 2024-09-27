@@ -31,6 +31,7 @@ namespace CutCraftEngineWebSocketCGLService.DataOutput
         {
             int sheetIndex, StockCount, iLayout, iSheet;
             double width, height;
+            string aID;
             bool sheetActive;
 
             // Iterate by each layout and output information about each layout,
@@ -45,13 +46,14 @@ namespace CutCraftEngineWebSocketCGLService.DataOutput
                     // Output information about each stock, such as stock Length
                     for (iSheet = sheetIndex; iSheet < sheetIndex + StockCount; iSheet++)
                     {
-                        if (_cutEngine.GetStockInfo(iSheet, out width, out height, out sheetActive))
+                        if (_cutEngine.GetStockInfo(iSheet, out width, out height, out sheetActive, out aID))
                         {
                             _sheets.Add(new CGLSheet
                             {
                                 Sheet = iSheet,
                                 Width = width,
-                                Height = height
+                                Height = height,
+                                StockItemId = int.TryParse(aID, out int stockItemId) ? stockItemId : throw new Exceptions.CustomException($"Can't parse StockItemId ({aID})")
                             });
                         }
                     }
