@@ -11,7 +11,14 @@ using System.Threading.Tasks;
 
 namespace CutCraftEngineWebSocketCGLService.CGLCalculator
 {
-    public class CutEngineInitializer
+    /// <summary>
+    /// Execute CutEngine calculator and get the list of cuttings 
+    /// data group for each material from calculator result.
+    /// 
+    /// Every material will have its own list of cuttings data group.
+    /// Everytime it's new material to calculate, it will create new instance of CutEngine.
+    /// </summary>
+    public class CGLCutEngineInitializer
     {
         private readonly Command _command;
         private CutEngine _cutEngine { get; set; }
@@ -19,26 +26,31 @@ namespace CutCraftEngineWebSocketCGLService.CGLCalculator
         // Add a private field to track the execution status
         private bool _isExecuted;
 
-        private readonly CGLProcessDataOutput _processDataOutput;
-
         // Add a public property to access the execution status
         public bool IsExecuted => _isExecuted;
 
         // Define an event that gets triggered when _cutEngine.Execute() is called
         public event EventHandler CutEngineExecuted;
 
-        public CutEngineInitializer(Command command)
+        public CGLCutEngineInitializer(Command command)
         {            
             _command = command;
-            _processDataOutput = new CGLProcessDataOutput(_command);
             return;
         }
 
         public CutEngine GetCutEngine() => _cutEngine;
 
-        public List<DataOutputs> Execute()
+        /// <summary>
+        /// CutGlib engine can only be execute once on each material,
+        /// this is how CutGLib engine works by default.
+        /// 
+        /// If there are multiple materials in the input, this method will run CutEngine for each material,
+        /// and add the list of cuttings data group of material to the global list of cuttings for each material.
+        /// </summary>
+        /// <returns></returns>
+        public List<List<Cutting>> Execute()
         {
-            List<DataOutputs> result = new List<DataOutputs>();
+            List<List<Cutting>> result = new List<List<Cutting>>();
             var materials = _command.Input.materials;
 
             foreach (var material in materials)
@@ -55,7 +67,7 @@ namespace CutCraftEngineWebSocketCGLService.CGLCalculator
                         AWidth: stock.aWidth,
                         AHeight: stock.aHeight,
                         aCount: stock.aCount,
-                        aID: stock.aID,
+                        aID: stock.id.ToString(),  // save stock id as aID in new stock
                         aWaste: stock.aWaste
                         );
                 }
@@ -73,31 +85,22 @@ namespace CutCraftEngineWebSocketCGLService.CGLCalculator
 
                 _cutEngine.Execute();                
                 _isExecuted = true;
-                OnCutEngineExecuted(new CutEngineEventArgs(_cutEngine));
+                OnCutEngineExecuted(new CGLCutEngineEventArgs(_cutEngine));
 
-
-                CuttingsFactory c = new CuttingsFactory(_cutEngine);
-                var a = Newtonsoft.Json.JsonConvert.SerializeObject(c.Get());
-                Console.WriteLine(a);
-
-                //result.Append(processData());
+                result.Add(new CGLCuttingsFactory(_cutEngine).Get());
             }
 
             return result;
         }
 
-        /// <summary>
-        /// After execution, data is processed.
-        /// </summary>
-        /// <returns>Completed DataOutputs object</returns>
-        //private DataOutputs processCuttingOutputData(ICutEngine2DStockSetup stock)
-        //{
-        //    _processDataOutput.SetCutEngine(this);
-        //    _processDataOutput.
-        //}
 
-        // Method to trigger the CutEngineExecuted event
-        protected virtual void OnCutEngineExecuted(CutEngineEventArgs e)
+        /// <summary>
+        /// When finished executing the CutEngine, raise the CutEngineExecuted event
+        /// 
+        /// When it's more than one material, CutEngine will be executed for each material.
+        /// Before start new execution, CutEngine calculator data can be retrieve before start a new instance.
+        /// </summary>
+        protected virtual void OnCutEngineExecuted(CGLCutEngineEventArgs e)
         {
             CutEngineExecuted?.Invoke(this, e);
         }
