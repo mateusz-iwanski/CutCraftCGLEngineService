@@ -7,11 +7,11 @@ using System.Threading.Tasks;
 
 namespace CutCraftEngineWebSocketCGLService.DataOutput
 {
-    public class Cutting2DStatisticsMapper
+    public class CGLCutting2DStatisticsMapper
     {
         CGLStatistics2D _statics2D;
 
-        public Cutting2DStatisticsMapper(CGLStatistics2D statics2D)
+        public CGLCutting2DStatisticsMapper(CGLStatistics2D statics2D)
         {
             _statics2D = statics2D;
             return;
