@@ -25,5 +25,7 @@ namespace CutCraftEngineWebSocketCGLService.DataOutput
         /// Height
         /// </summary>
         public double Height { get; init; }
+
+        public int StockItemId { get; init; }
     }
 }
