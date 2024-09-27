@@ -57,7 +57,7 @@ namespace CutCraftEngineWebSocketCGLService.DataOutput
         /// <returns>
         /// Distance between two points in mm
         /// </returns>
-        public static double calculateDistance(double X1, double Y1, double X2, double Y2)
+        public static double CalculateDistance(double X1, double Y1, double X2, double Y2)
         {
             return Math.Sqrt(Math.Pow(X2 - X1, 2) + Math.Pow(Y2 - Y1, 2));
         }
