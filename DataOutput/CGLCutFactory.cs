@@ -39,11 +39,11 @@ namespace CutCraftEngineWebSocketCGLService.DataOutput
             long CutsCount;
             double Width, Height, X1 = 0, Y1 = 0, X2 = 0, Y2 = 0;
             bool active;
+            string aID;
 
-            // Output guilltoine cuts for each sheet
             for (StockNo = 0; StockNo < _cutEngine.StockCount; StockNo++)
             {
-                _cutEngine.GetStockInfo(StockNo, out Width, out Height, out active);
+                _cutEngine.GetStockInfo(StockNo, out Width, out Height, out active, out aID);
 
                 // only the sheet used in the layout
                 if (active)
