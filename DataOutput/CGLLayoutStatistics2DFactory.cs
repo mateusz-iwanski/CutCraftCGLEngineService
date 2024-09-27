@@ -98,7 +98,7 @@ namespace CutCraftEngineWebSocketCGLService.DataOutput
 
                                 _cutEngine.GetStockTrimCut(iSheet, iCut, out X1, out Y1, out X2, out Y2);
 
-                                _cutTrimLength += CGLCut.calculateDistance(X1, Y1, X2, Y2);
+                                _cutTrimLength += CGLCut.CalculateDistance(X1, Y1, X2, Y2);
                             }
                             
                             /// count cut length
@@ -109,7 +109,7 @@ namespace CutCraftEngineWebSocketCGLService.DataOutput
 
                                 _cutEngine.GetStockCut(iSheet, iCut, out X1, out Y1, out X2, out Y2);
 
-                                _cutLength += CGLCut.calculateDistance(X1, Y1, X2, Y2);
+                                _cutLength += CGLCut.CalculateDistance(X1, Y1, X2, Y2);
                             }
 
                             _statistics.Add(new CGLStatistics2D
