@@ -60,7 +60,7 @@ namespace CutCraftEngineWebSocketCGLService.DataInput
         /// <summary>
         /// If priority is normal then such stock will be used first before any actual stocks that have low priority. 
         /// </summary>
-        private StockPriority getStockPriority(string priority) => priority == "normal" ? StockPriority.high : StockPriority.normal;
+        private CGLStockPriority getStockPriority(string priority) => priority == "normal" ? CGLStockPriority.high : CGLStockPriority.normal;
     }
 
 }
