@@ -6,7 +6,7 @@ using System.Net.NetworkInformation;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CutCraftEngineWebSocketCGLService.DataInput
+namespace CutCraftCGLEngineService.DataInput
 {
 
     /// <summary>

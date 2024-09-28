@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CutCraftEngineWebSocketCGLService.DataOutput
+namespace CutCraftCGLEngineService.DataOutput
 {
     /// <summary>
     /// Mapping list of CutGLib CGLCut to list of DataOutput Cut

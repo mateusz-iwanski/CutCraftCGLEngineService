@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CutCraftEngineWebSocketCGLService.DataOutput
+namespace CutCraftCGLEngineService.DataOutput
 {
     /// <summary>
     /// Build list of DataOutput Cutting from CutGlib.CutEngine data output results

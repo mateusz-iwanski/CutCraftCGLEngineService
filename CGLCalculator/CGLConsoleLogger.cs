@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CutCraftEngineWebSocketCGLService.CGLCalculator
+namespace CutCraftCGLEngineService.CGLCalculator
 {
     /// <summary>
     /// Console logger for CutGlib engine.

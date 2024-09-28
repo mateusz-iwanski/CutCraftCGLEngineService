@@ -6,7 +6,7 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CutCraftEngineWebSocketCGLService.DataInput
+namespace CutCraftCGLEngineService.DataInput
 {
     /// <summary>
     /// Unify the Stock data from the input data before adding it to the CutGLib engine.

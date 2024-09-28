@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CutCraftEngineWebSocketCGLService
+namespace CutCraftCGLEngineService
 {
     /// <summary>
     /// Interface for all calculators included in the service (CutGlib, TonCut, etc)
@@ -16,6 +16,6 @@ namespace CutCraftEngineWebSocketCGLService
     {        
         public bool Execute(Command command);
         public event EventHandler InitializeExecutedEvent;
-        public List<DataOutputs> GetDataOutputs();
+        public List<List<Cutting>> GetDataCuttingsOutputs();
     }
 }

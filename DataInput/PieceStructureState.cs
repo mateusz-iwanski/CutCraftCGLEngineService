@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CutCraftEngineWebSocketCGLService.DataInput
+namespace CutCraftCGLEngineService.DataInput
 {
     /// <summary>
     /// Check the piece structure state based on the data input from websocket client

@@ -1,7 +1,7 @@
 ﻿using CutCraftEngineData.DataInput;
 using CutCraftEngineData.DataOutput;
-using CutCraftEngineWebSocketCGLService.DataInput;
-using CutCraftEngineWebSocketCGLService.DataOutput;
+using CutCraftCGLEngineService.DataInput;
+using CutCraftCGLEngineService.DataOutput;
 using CutGLib;
 using System;
 using System.Collections.Generic;
@@ -9,7 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CutCraftEngineWebSocketCGLService.CGLCalculator
+namespace CutCraftCGLEngineService.CGLCalculator
 {
     /// <summary>
     /// Execute CutEngine calculator and get the list of cuttings 

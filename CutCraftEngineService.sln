@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.11.35222.181
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CutCraftEngineWebSocketCGLService", "CutCraftEngineWebSocketCGLService.csproj", "{B872B6CA-731B-4BBF-B866-21BBC1A9AFA9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CutCraftCGLEngineService", "CutCraftCGLEngineService.csproj", "{B872B6CA-731B-4BBF-B866-21BBC1A9AFA9}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CutCraftEngineData", "..\CutCraftEngineData\CutCraftEngineData.csproj", "{82C4199D-430D-4F7B-AB47-006D4A281A30}"
 EndProject

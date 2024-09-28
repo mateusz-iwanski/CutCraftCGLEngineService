@@ -1,6 +1,6 @@
 ﻿using CutCraftEngineData.DataInput;
 using CutCraftEngineData.DataOutput;
-using CutCraftEngineWebSocketCGLService.CGLCalculator;
+using CutCraftCGLEngineService.CGLCalculator;
 using CutGLib;
 using NLog.Layouts;
 using System;
@@ -10,7 +10,7 @@ using System.Text;
 using System.Threading.Tasks;
 using static System.Net.Mime.MediaTypeNames;
 
-namespace CutCraftEngineWebSocketCGLService.DataOutput
+namespace CutCraftCGLEngineService.DataOutput
 {
     /// <summary>
     /// 2D statistics from CutGLib results.

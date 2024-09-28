@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CutCraftEngineWebSocketCGLService.DataOutput
+namespace CutCraftCGLEngineService.DataOutput
 {
     public class CGLCutting2DStatisticsMapper
     {

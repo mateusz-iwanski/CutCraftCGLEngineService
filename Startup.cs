@@ -9,10 +9,10 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using NLog.Extensions.Logging;
 using System.IO;
-using CutCraftEngineWebSocketCGLService.CGLCalculator;
+using CutCraftCGLEngineService.CGLCalculator;
 using CutCraftEngineData.DataInput;
 
-namespace CutCraftEngineWebSocketCGLService
+namespace CutCraftCGLEngineService
 {
 
     /// <summary>

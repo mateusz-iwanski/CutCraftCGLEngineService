@@ -1,12 +1,12 @@
 ﻿using CutCraftEngineData.Configuration;
 using CutCraftEngineData.DataInput;
-using CutCraftEngineWebSocketCGLService.DataInput;
+using CutCraftCGLEngineService.DataInput;
 using CutGLib;
 using System;
 using System.ComponentModel;
 using System.Drawing;
 
-namespace CutCraftEngineWebSocketCGLService.CGLCalculator
+namespace CutCraftCGLEngineService.CGLCalculator
 {
     /// <summary>
     /// Extension methods for CutGLib->CutEngine properties.

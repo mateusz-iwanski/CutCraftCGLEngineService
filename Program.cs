@@ -9,11 +9,11 @@ using CutCraftEngineData.Configuration;
 using static System.Formats.Asn1.AsnWriter;
 using System;
 using CutCraftEngineData.DataInput;
-using CutCraftEngineService.CGLCalculator;
-using CutCraftEngineService.DataOutput;
+using CutCraftCGLEngineService.CGLCalculator;
+using CutCraftCGLEngineService.DataOutput;
 using CutCraftEngineData.DataOutput;
 
-namespace CutCraftEngineService
+namespace CutCraftCGLEngineService
 {
     internal class Program
     {

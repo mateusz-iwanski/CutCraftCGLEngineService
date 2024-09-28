@@ -9,7 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
-namespace CutCraftEngineWebSocketCGLService.DataInput
+namespace CutCraftCGLEngineService.DataInput
 {
     /// <summary>
     /// Get Pieces and StockItems from the command input with specific material.

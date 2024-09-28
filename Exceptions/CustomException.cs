@@ -2,7 +2,7 @@
 using NLog.Extensions.Logging;
 using System.Runtime.CompilerServices;
 
-namespace CutCraftEngineWebSocketCGLService.Exceptions
+namespace CutCraftCGLEngineService.Exceptions
 {
     public class CustomException : Exception
     {
