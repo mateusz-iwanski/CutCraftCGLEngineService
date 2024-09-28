@@ -8,27 +8,31 @@ using System.Threading.Tasks;
 namespace CutCraftCGLEngineService.CGLCalculator
 {
     /// <summary>
-    /// Print cutting optimization results with calculator settings on the console
+    /// Printer cutting optimization results with calculator settings with a specific format.
     /// </summary>
     /// <remarks>
-    /// Use by CGLConsoleLogger.
+    /// Use by CGLDisplayLogger.
     /// It is used to print the result to the console whenever Execute is called by CutEngine.
     /// </remarks>
-    public class CGLConsoleResultPrinter
+    public class CGLResultPrinter
     {
         private readonly CutEngine _cutEngine;
+        private readonly Action<string> _display;
 
-        public CGLConsoleResultPrinter(CGLCalculator calculator)
+        public CGLResultPrinter(CGLCalculator calculator, Action<string> displayDelegate)
         {
             if (calculator.IsExecuted() == false)
                 throw new InvalidOperationException("The calculator must be executed before printing the result to the console.");
 
             _cutEngine = calculator.GetCutEngine();
+            _display = displayDelegate ?? throw new ArgumentNullException(nameof(displayDelegate));
 
+            _display("Start ==============");
             PrinSheetByParts();
             PrintSheetByLayout();
             PrintLayoutInfo();
             PrintCalculatorSettings();
+            _display("============== End");
         }
 
         private void PrinSheetByParts()
@@ -38,12 +42,13 @@ namespace CutCraftCGLEngineService.CGLCalculator
             double Width, Height, X1 = 0, Y1 = 0, X2 = 0, Y2 = 0;
             bool active;
             string id;
-            Console.WriteLine("======================================");
-            Console.WriteLine("OUTPUT CUTS RESULTS");
-            Console.WriteLine("======================================");
-
-            Console.WriteLine("Used {0} sheets", _cutEngine.UsedStockCount);
             
+            _display("======================================");
+            _display("OUTPUT CUTS RESULTS");
+            _display("======================================");
+
+            _display($"Used {_cutEngine.UsedStockCount} sheets");
+
             // Output guilltoine cuts for each sheet
             for (StockNo = 0; StockNo < _cutEngine.StockCount; StockNo++)
             {
@@ -51,35 +56,34 @@ namespace CutCraftCGLEngineService.CGLCalculator
                 // Sheet was not used during calculation
                 if (!active)
                 {
-                    Console.WriteLine("Sheet={0} was not used.", StockNo);
+                    _display($"Sheet={StockNo} was not used.");
                     continue;
                 }
-                Console.WriteLine("Sheet={0}: Width={1} Height={2}", StockNo, Width, Height);
+                _display($"Sheet={StockNo}: Width={Width} Height={Height}");
                 // First output any trim cuts for the sheet StockNo
                 CutsCount = _cutEngine.GetStockTrimCutCount(StockNo);
                 for (iCut = 0; iCut < CutsCount; iCut++)
                 {
                     _cutEngine.GetStockTrimCut(StockNo, iCut, out X1, out Y1, out X2, out Y2);
-                    Console.WriteLine("Trim  Cut={0}:  X1={1};  Y1={2};  X2={3};  Y2={4}", iCut, X1, Y1, X2, Y2);
+                    _display($"Trim  Cut={iCut}:  X1={X1};  Y1={Y1};  X2={X2};  Y2={Y2}");
                 }
                 // Now output any actual cuts for the sheet StockNo
                 CutsCount = _cutEngine.GetStockCutCount(StockNo);
                 for (iCut = 0; iCut < CutsCount; iCut++)
                 {
                     _cutEngine.GetStockCut(StockNo, iCut, out X1, out Y1, out X2, out Y2);
-                    Console.WriteLine("Cut={0}:  X1={1};  Y1={2};  X2={3};  Y2={4}", iCut, X1, Y1, X2, Y2);
+                    _display($"Cut={iCut}:  X1={X1};  Y1={Y1};  X2={X2};  Y2={Y2}");
                 }
             }
-            Console.WriteLine();
 
             // Get parts locations
             double W = 0, H = 0, X = 0, Y = 0;
             bool Rotated;
-            Console.WriteLine("======================================");
-            Console.WriteLine("OUTPUT PARTS RESULTS");
-            Console.WriteLine("======================================");
+            _display("======================================");
+            _display("OUTPUT PARTS RESULTS");
+            _display("======================================");
 
-            Console.WriteLine("PartId Count={0}", _cutEngine.PartCount);
+            _display($"PartId Count={_cutEngine.PartCount}");
             for (iPart = 0; iPart < _cutEngine.PartCount; iPart++)
             {
                 // Get sizes and location of the source part with index Iter
@@ -87,12 +91,10 @@ namespace CutCraftCGLEngineService.CGLCalculator
                 // and the function returns FALSE.
                 if (_cutEngine.GetResultPart(iPart, out StockNo, out W, out H, out X, out Y, out Rotated, out id))
                 {
-                    Console.WriteLine("PartId Id={0};  sheet={1};  X={2};  Y={3};  Width={4};  Height={5}",
-                                  id, StockNo, X, Y, W, H);
+                    _display($"PartId Id={id};  sheet={StockNo};  X={X};  Y={Y};  Width={W};  Height={H}");
                 }
-                else Console.WriteLine("PartId {0} was not placed", iPart);
+                else _display($"PartId {iPart} was not placed");
             }
-            Console.WriteLine();
         }
 
         // This rotine outputs the results for 2D cutting optimization by layouts
@@ -103,12 +105,12 @@ namespace CutCraftCGLEngineService.CGLCalculator
             bool rotated, sheetActive;
             string Txt;
 
-            Console.WriteLine("======================================");
-            Console.WriteLine("OUTPUT LAYOUT RESULTS");
-            Console.WriteLine("======================================");
+            _display("======================================");
+            _display("OUTPUT LAYOUT RESULTS");
+            _display("======================================");
 
-            Console.WriteLine("Used {0} sheets", _cutEngine.UsedStockCount);
-            Console.WriteLine("Created {0} different layouts", _cutEngine.LayoutCount);
+            _display($"Used {_cutEngine.UsedStockCount} sheets");
+            _display($"Created {_cutEngine.LayoutCount} different layouts");
             // Iterate by each layout and output information about each layout,
             // such as number and length of used stocks and part indices cut from the stocks
             for (iLayout = 0; iLayout < _cutEngine.LayoutCount; iLayout++)
@@ -121,13 +123,13 @@ namespace CutCraftCGLEngineService.CGLCalculator
                     // Uncomment and change the file name if required
                     // _cutEngine.CreateStockImage(sheetIndex, string.Format("d:\\Panel_Layout_{0}.jpg", iLayout + 1), 2000);
 
-                    Console.WriteLine("Layout={0}:  Start Sheet={1};  Count of Sheet={2}", iLayout, sheetIndex, StockCount);
+                    _display($"Layout={iLayout}:  Start Sheet={sheetIndex};  Count of Sheet={StockCount}");
                     // Output information about each stock, such as stock Length
                     for (iSheet = sheetIndex; iSheet < sheetIndex + StockCount; iSheet++)
                     {
                         if (_cutEngine.GetStockInfo(iSheet, out width, out height, out sheetActive))
                         {
-                            Console.WriteLine("Sheet={0}:  Width={1}; Height={2}", iSheet, width, height);
+                            _display($"Sheet={iSheet}:  Width={width}; Height={height}");
                             // Output the information about parts cut from this sheet
                             // First we get quantity of parts cut from the sheet
                             partCount = _cutEngine.GetPartCountOnStock(iSheet);
@@ -142,8 +144,7 @@ namespace CutCraftCGLEngineService.CGLCalculator
                                     // Output the coordinates
                                     if (rotated) Txt = "Yes";
                                     else Txt = "No";
-                                    Console.WriteLine("PartId={0}; sheet={1}; Width={2}; Height={3}; X={4}; Y={5}; Rotated={6}",
-                                                  partIndex, iSheet, W, H, X, Y, Txt);
+                                    _display($"PartId={partIndex}; sheet={iSheet}; Width={W}; Height={H}; X={X}; Y={Y}; Rotated={Txt}");
 
                                 }
                             }
@@ -151,7 +152,6 @@ namespace CutCraftCGLEngineService.CGLCalculator
                     }
                 }
             }
-            Console.WriteLine();
         }
 
         // Outputs the layout information.
@@ -159,55 +159,53 @@ namespace CutCraftCGLEngineService.CGLCalculator
         {
             int StockNo, StockCount;
 
-            Console.WriteLine("======================================");
-            Console.WriteLine("OUTPUT LAYOUT INFO");
-            Console.WriteLine("======================================");
+            _display("======================================");
+            _display("OUTPUT LAYOUT INFO");
+            _display("======================================");
 
-            Console.WriteLine("Used {0} sheets", _cutEngine.UsedStockCount);
-            Console.WriteLine("Created {0} different layouts", _cutEngine.LayoutCount);
+            _display($"Used {_cutEngine.UsedStockCount} sheets");
+            _display($"Created {_cutEngine.LayoutCount} different layouts");
             for (int iLayout = 0; iLayout < _cutEngine.LayoutCount; iLayout++)
             {
                 _cutEngine.GetLayoutInfo(iLayout, out StockNo, out StockCount);
                 if (StockCount > 0)
                 {
-                    Console.WriteLine("Layout={0}:  Start Sheet={1};  Count of Sheets={2}", iLayout, StockNo, StockCount);
+                    _display($"Layout={iLayout}:  Start Sheet={StockNo};  Count of Sheets={StockCount}");
                 }
             }
-            Console.WriteLine();
         }
 
         // Outputs the calculator settings.
         private void PrintCalculatorSettings()
         {
-            Console.WriteLine("======================================");
-            Console.WriteLine("CALCULATOR SETTINGS");
-            Console.WriteLine("======================================");
+            _display("======================================");
+            _display("CALCULATOR SETTINGS");
+            _display("======================================");
 
-            Console.WriteLine("TrimLeft - {0}", _cutEngine.TrimLeft);
-            Console.WriteLine("TrimTop - {0}", _cutEngine.TrimTop);
-            Console.WriteLine("TrimRight - {0}", _cutEngine.TrimRight);
-            Console.WriteLine("TrimBottom - {0}", _cutEngine.TrimBottom);
-            Console.WriteLine("SawWidth - {0}", _cutEngine.SawWidth);
-            Console.WriteLine("MinimizeSheetRotation - {0}", _cutEngine.MinimizeSheetRotation);
-            Console.WriteLine("MaxCutLevel - {0}", _cutEngine.MaxCutLevel);
-            Console.WriteLine("CompleteMode - {0}", _cutEngine.CompleteMode);
-            Console.WriteLine("UseLayoutMinimization - {0}", _cutEngine.UseLayoutMinimization);
-            Console.WriteLine("MaxLayoutSize - {0}", _cutEngine.MaxLayoutSize);
-            Console.WriteLine("WasteSizeMin - {0}", _cutEngine.WasteSizeMin);
-            Console.WriteLine("Maximal size of the stock={0}", _cutEngine.MaxSizeSizes);
-            Console.WriteLine("Maximal size of the part={0}", _cutEngine.MaxPartSizes);
-            Console.WriteLine("Maximal number of decimal points={0}", _cutEngine.MaxDecimalPoint);
-            Console.WriteLine("Allow combine stock regular and waste={0}", _cutEngine.AllowCombineStockRegularAndWaste);
-            Console.WriteLine("Use large stock first={0}", _cutEngine.UseLargeStockFirst);            
-            Console.WriteLine("Is linear run={0}", _cutEngine.IsLinearRun);
-            Console.WriteLine("Remaining part count={0}", _cutEngine.RemainingPartCount);
-            Console.WriteLine("Used linear stock count={0}", _cutEngine.UsedLinearStockCount);            
-            Console.WriteLine("Stock count={0}", _cutEngine.StockCount);
-            Console.WriteLine("PartId count={0}", _cutEngine.PartCount);
-            Console.WriteLine("Elapsed time={0}", _cutEngine.ElapsedTime);
-            Console.WriteLine("Placed part count={0}", _cutEngine.PlacedPartCount);            
-            Console.WriteLine("Version={0}", _cutEngine.Version);
-            Console.WriteLine();
+            _display($"TrimLeft - {_cutEngine.TrimLeft}");
+            _display($"TrimTop - {_cutEngine.TrimTop}");
+            _display($"TrimRight - {_cutEngine.TrimRight}");
+            _display($"TrimBottom - {_cutEngine.TrimBottom}");
+            _display($"SawWidth - {_cutEngine.SawWidth}");
+            _display($"MinimizeSheetRotation - {_cutEngine.MinimizeSheetRotation}");
+            _display($"MaxCutLevel - {_cutEngine.MaxCutLevel}");
+            _display($"CompleteMode - {_cutEngine.CompleteMode}");
+            _display($"UseLayoutMinimization - {_cutEngine.UseLayoutMinimization}");
+            _display($"MaxLayoutSize - {_cutEngine.MaxLayoutSize}");
+            _display($"WasteSizeMin - {_cutEngine.WasteSizeMin}");
+            _display($"Maximal size of the stock={_cutEngine.MaxSizeSizes}");
+            _display($"Maximal size of the part={_cutEngine.MaxPartSizes}");
+            _display($"Maximal number of decimal points={_cutEngine.MaxDecimalPoint}");
+            _display($"Allow combine stock regular and waste={_cutEngine.AllowCombineStockRegularAndWaste}");
+            _display($"Use large stock first={_cutEngine.UseLargeStockFirst}");
+            _display($"Is linear run={_cutEngine.IsLinearRun}");
+            _display($"Remaining part count={_cutEngine.RemainingPartCount}");
+            _display($"Used linear stock count={_cutEngine.UsedLinearStockCount}");
+            _display($"Stock count={_cutEngine.StockCount}");
+            _display($"PartId count={_cutEngine.PartCount}");
+            _display($"Elapsed time={_cutEngine.ElapsedTime}");
+            _display($"Placed part count={_cutEngine.PlacedPartCount}");
+            _display($"Version={_cutEngine.Version}");
         }
     }
 }
