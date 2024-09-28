@@ -9,9 +9,11 @@ using CutCraftEngineData.Configuration;
 using static System.Formats.Asn1.AsnWriter;
 using System;
 using CutCraftEngineData.DataInput;
-using CutCraftEngineWebSocketCGLService.CGLCalculator;
+using CutCraftEngineService.CGLCalculator;
+using CutCraftEngineService.DataOutput;
+using CutCraftEngineData.DataOutput;
 
-namespace CutCraftEngineWebSocketCGLService
+namespace CutCraftEngineService
 {
     internal class Program
     {
@@ -68,13 +70,18 @@ namespace CutCraftEngineWebSocketCGLService
             string json = File.ReadAllText("test_input.json");
             Command command = JsonConvert.DeserializeObject<Command>(json);
             calculator.Execute(command);
-            Console.WriteLine("================" + calculator.GetDataOutputs());
+            Console.WriteLine("================" + calculator.GetDataCuttingsOutputs());
 
+            // generate and print data output in standard
+            CutEngine cutEngine = ((CGLCalculator.CGLCalculator)calculator).GetCutEngine();
+            CGLDataOutputFactory cGLDataOutputFactory = new CGLDataOutputFactory(cutEngine, command.Input, calculator.GetDataCuttingsOutputs());
+            List<DataOutputs> dataOutputs = cGLDataOutputFactory.Get();
+            Console.WriteLine(JsonConvert.SerializeObject(dataOutputs));
         }
 
         static void HandleParseError(IEnumerable<Error> errs)
         {
-            // Handle errors
+            // Handle errorss
             Console.WriteLine("Error parsing arguments.");
         }
 
