@@ -63,7 +63,7 @@ namespace CutCraftCGLEngineService
 
             if (calculator.GetType() == typeof(CGLCalculator.CGLCalculator))
             {
-                CGLConsoleLogger cGLConsoleLogger = new CGLConsoleLogger((CGLCalculator.CGLCalculator)calculator);
+                CGLDisplayLogger cGLConsoleLogger = new CGLDisplayLogger((CGLCalculator.CGLCalculator)calculator, Console.WriteLine);
             }
 
             // Deserialize the JSON file into a Command object
